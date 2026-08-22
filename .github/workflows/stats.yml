@@ -1,0 +1,49 @@
+name: Generate Stats
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch: {}
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  stats:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar stats.svg da API pública do github-readme-stats
+        run: |
+          mkdir -p out
+          curl -s "https://github-readme-stats.vercel.app/api?username=${{ github.repository_owner }}&hide_title=false&hide_rank=false&show_icons=true&include_all_commits=true&count_private=true&disable_animations=false&theme=dracula&locale=en&hide_border=false" -o out/stats.svg
+          curl -s "https://github-readme-stats.vercel.app/api/top-langs/?username=${{ github.repository_owner }}&locale=en&hide_title=false&layout=compact&card_width=320&langs_count=5&theme=dracula&hide_border=false" -o out/languages.svg
+
+      - name: Publicar stats.svg na branch stats-output
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: out
+          publish_branch: stats-output
+          keep_files: false
+          allow_empty_commit: true
+
+  languages:
+    needs: stats
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar languages.svg
+        run: |
+          mkdir -p out
+          curl -s "https://github-readme-stats.vercel.app/api/top-langs/?username=${{ github.repository_owner }}&locale=en&hide_title=false&layout=compact&card_width=320&langs_count=5&theme=dracula&hide_border=false" -o out/languages.svg
+
+      - name: Publicar languages.svg na branch languages-output
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: out
+          publish_branch: languages-output
+          keep_files: false
+          allow_empty_commit: true
