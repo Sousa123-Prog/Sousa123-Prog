@@ -10,7 +10,6 @@
   <img width="12" />
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/godot/godot-original.svg" height="30" alt="godot logo"  />
   <img width="12" />
-  <img src="https://img.shields.io/static/v1?message=GDScript&logo=godotengine&label=&color=478CBF&logoColor=white&labelColor=&style=for-the-badge" height="30" alt="gdscript logo"  />
 </div>
 
 <div data-importer="socials" align="left">
